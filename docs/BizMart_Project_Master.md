@@ -136,7 +136,8 @@ Tasks:
 * [x] Login API
 * [x] Global Exception Handler
 * [x] JWT Generation
-* [ ] JWT Validation
+* [x] JWT Extraction
+* [x] JWT Validation
 * [ ] Spring Security Configuration
 
 ---
@@ -234,10 +235,10 @@ Current Milestone:
 Milestone 1 - Authentication
 
 Current Task:
-JWT Validation
+Spring Security Configuration
 
 Next Task:
-TBD
+Company Module
 
 # Git History
 
@@ -267,7 +268,7 @@ Branch:
 main
 
 Last Commit:
-Add JWT dependencies and update project tracker
+Implement JWT token generation and update project tracker
 
 Date:
 2026-06-03

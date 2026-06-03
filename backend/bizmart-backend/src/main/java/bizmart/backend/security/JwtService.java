@@ -25,4 +25,17 @@ public class JwtService {
 		return Jwts.builder().subject(email).issuedAt(new Date())
 				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)).signWith(getSigningKey()).compact();
 	}
+
+	public String extractUsername(String token) {
+
+		return Jwts.parser().verifyWith((javax.crypto.SecretKey) getSigningKey()).build().parseSignedClaims(token)
+				.getPayload().getSubject();
+	}
+
+	public boolean isTokenValid(String token, String email) {
+
+		String username = extractUsername(token);
+
+		return username.equals(email);
+	}
 }
