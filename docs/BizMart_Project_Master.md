@@ -139,7 +139,7 @@ Tasks:
 * [x] JWT Extraction
 * [x] JWT Validation
 * [x] Spring Security Configuration
-* [ ] Role-based JWT
+* [x] Role-based JWT
 
 ---
 

@@ -21,15 +21,35 @@ public class JwtService {
 		return key;
 	}
 
-	public String generateToken(String email) {
-		return Jwts.builder().subject(email).issuedAt(new Date())
-				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)).signWith(getSigningKey()).compact();
+	public String generateToken(String email,String role) {
+		return Jwts.builder()
+				.subject(email)
+				.claim("role", role)
+				.issuedAt(new Date())
+				.expiration(
+						new Date(
+								System.currentTimeMillis() 
+								+ 1000 * 60 * 60))
+				.signWith(getSigningKey())
+				.compact();
 	}
 
 	public String extractUsername(String token) {
 
 		return Jwts.parser().verifyWith((javax.crypto.SecretKey) getSigningKey()).build().parseSignedClaims(token)
 				.getPayload().getSubject();
+	}
+	
+	public String extractRole(String token) {
+
+	    return Jwts.parser()
+	            .verifyWith(
+	                    (javax.crypto.SecretKey)
+	                            getSigningKey())
+	            .build()
+	            .parseSignedClaims(token)
+	            .getPayload()
+	            .get("role", String.class);
 	}
 
 	public boolean isTokenValid(String token, String email) {
