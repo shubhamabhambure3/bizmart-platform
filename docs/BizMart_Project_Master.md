@@ -139,6 +139,7 @@ Tasks:
 * [x] JWT Extraction
 * [x] JWT Validation
 * [x] Spring Security Configuration
+* [ ] Role-based JWT
 
 ---
 
@@ -235,7 +236,7 @@ Current Milestone:
 Milestone 1 - Authentication
 
 Current Task:
-Spring Security Configuration
+Role-based JWT
 
 Next Task:
 Company Module
@@ -268,7 +269,7 @@ Branch:
 main
 
 Last Commit:
-Implement JWT token generation and update project tracker
+Configure JWT based Spring Security
 
 Date:
 2026-06-03
