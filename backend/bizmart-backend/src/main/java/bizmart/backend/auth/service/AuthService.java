@@ -7,16 +7,19 @@ import bizmart.backend.auth.entity.User;
 import bizmart.backend.auth.repository.UserRepository;
 import bizmart.backend.common.exception.InvalidCredentialsException;
 import bizmart.backend.common.exception.UserAlreadyExistsException;
+import bizmart.backend.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import bizmart.backend.auth.dto.AuthenticationResponse;
 import bizmart.backend.auth.dto.LoginRequest;
-import bizmart.backend.auth.dto.LoginResponse;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtService jwtService;
 
 	public User registerUser(RegistrationRequest request) {
 
@@ -34,7 +37,7 @@ public class AuthService {
 		return userRepository.save(user);
 	}
 
-	public LoginResponse login(LoginRequest request) {
+	public AuthenticationResponse login(LoginRequest request) {
 
 		User user = userRepository.findByEmail(request.getEmail())
 				.orElseThrow(() -> new InvalidCredentialsException("User not found"));
@@ -45,7 +48,13 @@ public class AuthService {
 			throw new InvalidCredentialsException("Invalid Password");
 		}
 
-		return new LoginResponse("Login Successful");
+		
+		
+		String token =
+		        jwtService.generateToken(
+		                user.getEmail());
+
+		return new AuthenticationResponse(token);
 	}
 
 }

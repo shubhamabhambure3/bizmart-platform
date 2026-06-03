@@ -11,9 +11,8 @@ import bizmart.backend.auth.dto.RegistrationRequest;
 import bizmart.backend.auth.entity.User;
 import bizmart.backend.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
-
+import bizmart.backend.auth.dto.AuthenticationResponse;
 import bizmart.backend.auth.dto.LoginRequest;
-import bizmart.backend.auth.dto.LoginResponse;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -32,9 +31,9 @@ public class AuthController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request){
+	public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request){
 		
-		LoginResponse response = authService.login(request);
+		AuthenticationResponse response = authService.login(request);
 		
 		return ResponseEntity.ok(response);
 		

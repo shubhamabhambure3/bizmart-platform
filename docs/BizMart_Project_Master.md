@@ -135,7 +135,7 @@ Tasks:
 * [x] Password Encryption (BCrypt)
 * [x] Login API
 * [x] Global Exception Handler
-* [ ] JWT Generation
+* [x] JWT Generation
 * [ ] JWT Validation
 * [ ] Spring Security Configuration
 
@@ -234,7 +234,7 @@ Current Milestone:
 Milestone 1 - Authentication
 
 Current Task:
-JWT Authentication
+JWT Validation
 
 Next Task:
 TBD
@@ -267,7 +267,7 @@ Branch:
 main
 
 Last Commit:
-Update project tracker after exception handling
+Add JWT dependencies and update project tracker
 
 Date:
 2026-06-03
