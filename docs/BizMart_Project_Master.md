@@ -121,7 +121,7 @@ None
 ## Milestone 1 - Authentication
 
 Status:
-Running
+COMPLETED
 
 Tasks:
 * [x] Create Package Structure
@@ -138,7 +138,7 @@ Tasks:
 * [x] JWT Generation
 * [x] JWT Extraction
 * [x] JWT Validation
-* [ ] Spring Security Configuration
+* [x] Spring Security Configuration
 
 ---
 
