@@ -134,7 +134,7 @@ Tasks:
 * [x] Registration API
 * [x] Password Encryption (BCrypt)
 * [x] Login API
-* [ ] Global Exception Handler
+* [x] Global Exception Handler
 * [ ] JWT Generation
 * [ ] JWT Validation
 * [ ] Spring Security Configuration
@@ -210,7 +210,9 @@ Tasks:
 
 # Completed APIs
 
-None
+POST /api/auth/register
+
+POST /api/auth/login
 
 ---
 
@@ -232,10 +234,40 @@ Current Milestone:
 Milestone 1 - Authentication
 
 Current Task:
-none for today
+JWT Authentication
 
 Next Task:
-Global Exception Handler
+TBD
 
-Last Updated:
-2026-06-02
+# Git History
+
+## Commit 001
+
+Message:
+Initial authentication module setup
+
+Features:
+
+* Spring Boot Setup
+* MySQL Configuration
+* Package Structure
+* User Entity
+* Role Enum
+* User Repository
+* Registration API
+* BCrypt Encryption
+* Login API
+
+# Git Information
+
+Repository:
+https://github.com/shubhamabhambure3/bizmart-platform
+
+Branch:
+main
+
+Last Commit:
+Add project gitignore
+
+Date:
+2026-06-03
