@@ -143,16 +143,40 @@ Tasks:
 
 ---
 
-## Milestone 2 - Seller Module
+## Milestone 2 - Company Management Module
 
 Status:
 NOT STARTED
 
 Tasks:
 
-* [ ] Company Entity
-* [ ] Company CRUD
+* [x] Company Entity
+* [x] Company Repository
+* [x] Company DTO
+* [x] Company Service
+* [x] Company Controller
+* [x] Create Company API
+* [x] Get Company API
+* [x] Get All Companies API
+* [x] Update Company API
+* [x] Delete Company API
 * [ ] Seller Dashboard API
+
+## Class Summary
+
+### CompanyService
+
+createCompany()
+- Create and save company
+
+getAllCompanies()
+- Fetch all companies
+
+getCompanyById()
+- Fetch company by id
+
+mapToResponse()
+- Convert Entity to DTO
 
 ---
 
@@ -210,6 +234,13 @@ Tasks:
 
 ---
 
+## Future Improvements
+
+- Replace ownerId with User entity relationship (@ManyToOne)
+- Derive owner from JWT instead of request body
+
+---
+
 # Completed APIs
 
 POST /api/auth/register
@@ -233,13 +264,13 @@ None
 # Current Status
 
 Current Milestone:
-Milestone 1 - Authentication
+Milestone 2 - Company Management Module
 
 Current Task:
-Role-based JWT
+Seller Dashboard API
 
 Next Task:
-Company Module
+Financial Module
 
 # Git History
 
