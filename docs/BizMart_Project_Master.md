@@ -27,162 +27,6 @@ A platform where business owners can list companies for acquisition or investmen
 * Basic Matching Engine
 * Admin Dashboard
 
-# Business Workflow
-
-## Seller Journey
-
-Seller Registration
-↓
-Login
-↓
-Create Company Profile
-↓
-Add Financial Information
-↓
-Generate Business Valuation
-↓
-Create Business Listing
-↓
-Receive Buyer Interest
-↓
-Connect With Buyer
-
-## Buyer Journey
-
-Buyer Registration
-↓
-Login
-↓
-Browse Listings
-↓
-Search Businesses
-↓
-View Company Details
-↓
-View Financial Information
-↓
-View Business Valuation
-↓
-Express Interest
-↓
-Connect With Seller
-
-## Admin Journey
-
-Admin Login
-↓
-Manage Users
-↓
-Manage Companies
-↓
-Manage Financial Records
-↓
-Manage Listings
-↓
-Monitor Buyer Interests
-↓
-Monitor Platform Activity
-↓
-Maintain Platform Integrity
-
-# Domain Model
-
-User
-├── ADMIN
-├── SELLER
-└── BUYER
-
-SELLER
-│
-└── Company
-│
-├── Financial Information
-│
-├── Valuation
-│
-└── Listing
-
-BUYER
-│
-└── Interest
-│
-└── Company Listing
-
-ADMIN
-│
-├── Manage Users
-├── Manage Companies
-├── Manage Financial Records
-├── Manage Listings
-└── Monitor Platform Activity
-
-# Current Domain Relationships
-
-User
-│
-├── Role
-│      ├── ADMIN
-│      ├── SELLER
-│      └── BUYER
-│
-└── Company (future ownership relationship)
-
-Company
-│
-├── Financial Information
-├── Valuation
-├── Listing
-└── Seller Owner
-
-Listing
-│
-└── Buyer Interests
-
-# Future Ownership Rules
-
-* SELLER can manage only their own companies.
-* BUYER cannot create, update, or delete companies.
-* ADMIN can manage platform data.
-* Ownership will eventually be derived from JWT instead of request payload.
-* ownerId will eventually be replaced by @ManyToOne User relationship.
-
-# Quality Pipeline
-
-Status:
-NOT STARTED
-
-Purpose:
-
-* Automated Unit Testing
-* Automated API Testing
-* Automated Build Validation
-* CI/CD Pipeline using GitHub Actions
-
-Tasks:
-
-* JUnit Setup
-* CompanyService Tests
-* AuthService Tests
-* MockMvc API Tests
-* GitHub Actions CI Pipeline
-
-# Additional Important Decisions
-
-* This is a startup MVP, not a college project.
-* Authentication implemented first, authorization hardening later.
-* Security gaps are tracked in Milestone 7 and must not be forgotten.
-* Prefer complete class implementations over partial snippets.
-* Explain class purpose before implementation.
-* Maintain Class Summary section after each module.
-* Prefer explicit loops over Streams for readability.
-* Prefer Optional.isEmpty() over orElseThrow() during MVP phase.
-* Follow Controller → Service → Repository architecture.
-* Commit only after meaningful feature completion.
-* Use GitHub Actions for CI/CD before Jenkins.
-* Docker may be added after MVP completion.
-* Security Hardening milestone is mandatory before project completion.
-
-
 ---
 
 # Technology Stack
@@ -348,12 +192,12 @@ getCompaniesByOwnerId()
 ## Milestone 3 - Financial Module
 
 Status:
-NOT STARTED
+IN PROGRESS
 
 Tasks:
 
-* [ ] Financial Entity
-* [ ] Financial CRUD
+* [x] Financial Entity
+* [x] Financial CRUD
 * [ ] Valuation Engine
 
 ---
@@ -366,6 +210,31 @@ Tasks:
 * [ ] MockMvc API Tests
 * [ ] GitHub Actions CI Pipeline
 
+---
+## Class Summary
+
+### FinancialService
+
+createFinancial()
+- Create and save financial record
+
+getAllFinancials()
+- Fetch all financial records
+
+getFinancialById()
+- Fetch financial record by id
+
+getFinancialByCompanyId()
+- Fetch financial record by company id
+
+updateFinancial()
+- Update financial record
+
+deleteFinancial()
+- Delete financial record
+
+mapToResponse()
+- Convert Entity to DTO
 ---
 
 ## Milestone 4 - Listing Module
@@ -441,6 +310,12 @@ GET    /api/companies/{id}
 PUT    /api/companies/{id}
 DELETE /api/companies/{id}
 GET    /api/companies/owner/{ownerId}
+POST   /api/financials
+GET    /api/financials
+GET    /api/financials/{id}
+GET    /api/financials/company/{companyId}
+PUT    /api/financials/{id}
+DELETE /api/financials/{id}
 
 ---
 
@@ -462,10 +337,10 @@ Current Milestone:
 Milestone 3 - Financial Module
 
 Current Task:
-Financial Entity
+Valuation Engine
 
 Next Task:
-Financial Repository
+Valuation APIs
 
 # Git History
 
@@ -516,6 +391,7 @@ Configure JWT based Spring Security
 
 users
 companies
+company_financials
 
 ### Current Milestone
 
