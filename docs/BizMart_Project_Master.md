@@ -192,17 +192,30 @@ getCompaniesByOwnerId()
 ## Milestone 3 - Financial Module
 
 Status:
-IN PROGRESS
+COMPLETED
 
 Tasks:
 
 * [x] Financial Entity
 * [x] Financial CRUD
-* [ ] Valuation Engine
+* [x] Valuation Engine
 
 ---
 
-## Milestone 3 - Quality Pipeline
+### ValuationService
+
+generateValuation()
+- Generate valuation from financial data
+
+getValuationByCompanyId()
+- Fetch valuation by company id
+
+mapToResponse()
+- Convert Entity to DTO
+
+---
+
+## Milestone 3.5 - Quality Pipeline
 
 * [ ] JUnit Setup
 * [ ] CompanyService Tests
@@ -316,6 +329,8 @@ GET    /api/financials/{id}
 GET    /api/financials/company/{companyId}
 PUT    /api/financials/{id}
 DELETE /api/financials/{id}
+POST /api/valuations
+GET  /api/valuations/company/{companyId}
 
 ---
 
@@ -334,13 +349,13 @@ None
 # Current Status
 
 Current Milestone:
-Milestone 3 - Financial Module
+Milestone 3.5 - Quality Pipeline
 
 Current Task:
-Valuation Engine
+JUnit Setup
 
 Next Task:
-Valuation APIs
+CompanyService Tests
 
 # Git History
 
@@ -392,14 +407,8 @@ Configure JWT based Spring Security
 users
 companies
 company_financials
+valuations
 
-### Current Milestone
-
-Milestone 3 - Financial Module
-
-### Current Task
-
-Financial Entity
 
 ### Security Hardening Backlog
 
@@ -419,4 +428,4 @@ Financial Entity
 - Commit after completing a feature/module
 
 Date:
-2026-06-04
+2026-06-05
