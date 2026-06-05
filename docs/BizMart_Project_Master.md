@@ -222,7 +222,7 @@ mapToResponse()
 * [x] FinancialService Tests
 * [ ] AuthService Tests
 * [ ] MockMvc API Tests
-* [ ] GitHub Actions CI Pipeline
+* [x] GitHub Actions CI Pipeline
 
 ---
 ## Class Summary
@@ -350,13 +350,13 @@ None
 # Current Status
 
 Current Milestone:
-Milestone 3.5 - Quality Pipeline
+Milestone 4 - Listing Module
 
 Current Task:
-JUnit Setup
+Listing Entity
 
 Next Task:
-CompanyService Tests
+
 
 # Git History
 
