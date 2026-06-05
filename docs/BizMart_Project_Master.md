@@ -217,8 +217,9 @@ mapToResponse()
 
 ## Milestone 3.5 - Quality Pipeline
 
-* [ ] JUnit Setup
-* [ ] CompanyService Tests
+* [x] JUnit Setup
+* [x] CompanyService Tests
+* [x] FinancialService Tests
 * [ ] AuthService Tests
 * [ ] MockMvc API Tests
 * [ ] GitHub Actions CI Pipeline
