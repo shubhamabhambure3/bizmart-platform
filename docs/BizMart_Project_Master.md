@@ -220,11 +220,13 @@ mapToResponse()
 * [x] JUnit Setup
 * [x] GitHub Actions CI Pipeline
 
+* [x] BizmartBackendApplicationTests
 * [x] CompanyServiceTest
 * [x] FinancialServiceTest
 * [x] ListingServiceTest
 * [x] BuyerProfileServiceTest
 * [x] InterestServiceTest
+* [x] MatchingServiceTest
 
 * [ ] AuthService Tests
 * [ ] MockMvc API Tests
@@ -285,7 +287,7 @@ Listing Module
 ## Milestone 5 - Buyer Module
 
 Status:
-WIP
+COMPLETE
 
 Tasks:
 
@@ -305,7 +307,7 @@ Tasks:
 * [x] Buyer Profile Module Tested
 
 * [x] Interest API
-* [ ] Matching Engine
+* [x] Matching Engine
 
 ---
 
@@ -437,6 +439,29 @@ GET /api/listings/company/{companyId}
 PUT /api/listings/{id}
 DELETE /api/listings/{id}
 
+Buyer Profile Module
+
+POST   /api/buyers
+GET    /api/buyers
+GET    /api/buyers/{id}
+GET    /api/buyers/user/{userId}
+PUT    /api/buyers/{id}
+DELETE /api/buyers/{id}
+
+Interest Module
+
+POST   /api/interests
+GET    /api/interests
+GET    /api/interests/{id}
+GET    /api/interests/buyer/{buyerProfileId}
+GET    /api/interests/listing/{listingId}
+PUT    /api/interests/{id}
+DELETE /api/interests/{id}
+
+Matching Module
+
+GET /api/matching/{buyerProfileId}
+
 ---
 
 # Pending APIs
@@ -454,13 +479,13 @@ None
 # Current Status
 
 Current Milestone:
-Milestone 5 - Buyer Interest Module
+Milestone 5.5 - Security Hardening
 
 Current Task:
-Buyer Profile Entity
+TBD
 
 Next Task:
-Interest Management
+TBD
 
 # Git History
 
