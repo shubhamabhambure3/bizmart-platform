@@ -218,11 +218,14 @@ mapToResponse()
 ## Milestone 3.5 - Quality Pipeline
 
 * [x] JUnit Setup
-* [x] CompanyService Tests
-* [x] FinancialService Tests
+* [x] CompanyServiceTest
+* [x] FinancialServiceTest
+* [x] ListingServiceTest
+* [x] BuyerProfileServiceTest
+* [x] GitHub Actions CI Pipeline
+
 * [ ] AuthService Tests
 * [ ] MockMvc API Tests
-* [x] GitHub Actions CI Pipeline
 
 ---
 ## Class Summary
@@ -254,24 +257,51 @@ mapToResponse()
 ## Milestone 4 - Listing Module
 
 Status:
-NOT STARTED
+COMPLETED
 
 Tasks:
 
-* [ ] Listing Entity
-* [ ] Listing CRUD
-* [ ] Search API
+Listing Module
+
+* [x] Listing Entity
+* [x] Listing Repository
+* [x] Listing DTO
+* [x] Listing Service
+* [x] Listing Controller
+
+* [x] Create Listing API
+* [x] Get Listing API
+* [x] Get All Listings API
+* [x] Get Listings By Company API
+* [x] Update Listing API
+* [x] Delete Listing API
+
+* [x] Listing Module Tested
 
 ---
 
 ## Milestone 5 - Buyer Module
 
 Status:
-NOT STARTED
+WIP
 
 Tasks:
 
-* [ ] Buyer Profile
+* [x] Buyer Profile Entity
+* [x] Buyer Profile Repository
+* [x] Buyer Profile DTO
+* [x] Buyer Profile Service
+* [x] Buyer Profile Controller
+
+* [x] Create Buyer Profile API
+* [x] Get Buyer Profile API
+* [x] Get All Buyer Profiles API
+* [x] Get Buyer Profile By User API
+* [x] Update Buyer Profile API
+* [x] Delete Buyer Profile API
+
+* [x] Buyer Profile Module Tested
+
 * [ ] Interest API
 * [ ] Matching Engine
 
@@ -316,22 +346,43 @@ Tasks:
 
 # Completed APIs
 
+Authentication Module
+
 POST /api/auth/register
 POST /api/auth/login
+
+Company Management Module
+
 POST   /api/companies
 GET    /api/companies
 GET    /api/companies/{id}
 PUT    /api/companies/{id}
 DELETE /api/companies/{id}
+
 GET    /api/companies/owner/{ownerId}
+
+Financial Module
+
 POST   /api/financials
 GET    /api/financials
 GET    /api/financials/{id}
 GET    /api/financials/company/{companyId}
 PUT    /api/financials/{id}
 DELETE /api/financials/{id}
+
+Valuation Module
+
 POST /api/valuations
 GET  /api/valuations/company/{companyId}
+
+Listing Module
+
+POST /api/listings
+GET /api/listings
+GET /api/listings/{id}
+GET /api/listings/company/{companyId}
+PUT /api/listings/{id}
+DELETE /api/listings/{id}
 
 ---
 
@@ -350,13 +401,13 @@ None
 # Current Status
 
 Current Milestone:
-Milestone 4 - Listing Module
+Milestone 5 - Buyer Interest Module
 
 Current Task:
-Listing Entity
+Buyer Profile Entity
 
 Next Task:
-
+Interest Management
 
 # Git History
 
@@ -386,22 +437,49 @@ Branch:
 main
 
 Last Commit:
-Configure JWT based Spring Security
+Implement listing management module
 
 ## Project Handover Notes
 
 ### Completed Modules
 
 1. Authentication Module
-   - Registration
-   - Login
-   - JWT
-   - Spring Security
-   - Role-based JWT
+
+   * Registration
+   * Login
+   * JWT Authentication
+   * BCrypt Password Encoding
+   * Spring Security
+   * Role-Based JWT Claims
 
 2. Company Management Module
-   - Company CRUD
-   - Seller Dashboard API
+
+   * Company CRUD APIs
+   * Seller Dashboard API
+
+3. Financial Module
+
+   * Financial CRUD APIs
+
+4. Valuation Module
+
+   * Business Valuation Generation
+   * Valuation Retrieval APIs
+
+5. Listing Module
+
+   * Listing CRUD APIs
+   * Listing Status Management
+
+6. Quality Pipeline
+
+   * JUnit Setup
+   * CompanyServiceTest
+   * FinancialServiceTest
+   * ListingServiceTest
+   * H2 Test Configuration
+   * GitHub Actions CI Pipeline
+
 
 ### Current Database Tables
 
@@ -409,6 +487,7 @@ users
 companies
 company_financials
 valuations
+listings
 
 
 ### Security Hardening Backlog
@@ -429,4 +508,4 @@ valuations
 - Commit after completing a feature/module
 
 Date:
-2026-06-05
+2026-06-06
