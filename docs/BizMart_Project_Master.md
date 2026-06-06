@@ -218,11 +218,13 @@ mapToResponse()
 ## Milestone 3.5 - Quality Pipeline
 
 * [x] JUnit Setup
+* [x] GitHub Actions CI Pipeline
+
 * [x] CompanyServiceTest
 * [x] FinancialServiceTest
 * [x] ListingServiceTest
 * [x] BuyerProfileServiceTest
-* [x] GitHub Actions CI Pipeline
+* [x] InterestServiceTest
 
 * [ ] AuthService Tests
 * [ ] MockMvc API Tests
@@ -302,8 +304,59 @@ Tasks:
 
 * [x] Buyer Profile Module Tested
 
-* [ ] Interest API
+* [x] Interest API
 * [ ] Matching Engine
+
+---
+
+### BuyerProfileService
+
+createBuyerProfile()
+- Create and save buyer profile
+
+getAllBuyerProfiles()
+- Fetch all buyer profiles
+
+getBuyerProfileById()
+- Fetch buyer profile by id
+
+getBuyerProfileByUserId()
+- Fetch buyer profile by user id
+
+updateBuyerProfile()
+- Update buyer profile
+
+deleteBuyerProfile()
+- Delete buyer profile
+
+mapToResponse()
+- Convert Entity to DTO
+
+### InterestService
+
+createInterest()
+- Create buyer interest
+
+getAllInterests()
+- Fetch all interests
+
+getInterestById()
+- Fetch interest by id
+
+getInterestsByBuyerProfileId()
+- Fetch buyer interests
+
+getInterestsByListingId()
+- Fetch listing interests
+
+updateInterest()
+- Update interest status/details
+
+deleteInterest()
+- Delete interest
+
+mapToResponse()
+- Convert Entity to DTO
 
 ---
 
