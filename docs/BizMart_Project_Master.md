@@ -479,13 +479,13 @@ None
 # Current Status
 
 Current Milestone:
-Milestone 5.5 - Security Hardening
+Milestone 7 - Security Hardening
 
 Current Task:
-TBD
+Derive owner from JWT
 
 Next Task:
-TBD
+Restrict company creation to SELLER
 
 # Git History
 
@@ -515,7 +515,7 @@ Branch:
 main
 
 Last Commit:
-Implement listing management module
+Implement buyer matching engine
 
 ## Project Handover Notes
 
