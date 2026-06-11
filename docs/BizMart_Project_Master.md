@@ -379,14 +379,11 @@ Tasks:
 
 ## Milestone 7 - Security Hardening
 
-* [ ] Derive owner from JWT
-* [ ] Restrict company creation to SELLER
-* [ ] Restrict company update to owner
-* [ ] Restrict company deletion to owner
-* [ ] Implement role-based method security
-* [ ] Add UserDetailsService
-* [ ] Add ownership validation
-* [ ] Add foreign key constraints
+* [x] Derive owner from JWT
+* [x] Restrict company creation to SELLER
+* [x] Restrict company update to owner
+* [x] Restrict company deletion to owner
+* [x] Add ownership validation
 
 ---
 
@@ -396,6 +393,9 @@ Tasks:
 - Derive owner from JWT instead of request body
 - Enforce SELLER role for company creation
 - Add foreign key between companies.owner_id and users.id
+- Implement role-based method security - Advanced Security Improvements
+- Add UserDetailsService - Advanced Security Improvements
+- Add foreign key constraints - Advanced Security Improvements
 
 ---
 
@@ -482,10 +482,10 @@ Current Milestone:
 Milestone 7 - Security Hardening
 
 Current Task:
-Derive owner from JWT
+Security Hardening Review
 
 Next Task:
-Restrict company creation to SELLER
+Merge feature/security-hardening into main
 
 # Git History
 
