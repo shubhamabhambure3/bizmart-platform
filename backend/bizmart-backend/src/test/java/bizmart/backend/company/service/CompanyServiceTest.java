@@ -40,8 +40,12 @@ class CompanyServiceTest {
 		request.setLocation(
 				"Pune");
 
-		request.setOwnerId(
-				1L);
+		/*
+		 * Removed for security hardening
+		 */
+		
+//		request.setOwnerId(
+//				1L);
 
 		CompanyResponse response =
 				companyService.createCompany(

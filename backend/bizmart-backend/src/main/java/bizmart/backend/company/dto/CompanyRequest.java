@@ -19,6 +19,11 @@ public class CompanyRequest {
 
 	private String location;
 
-	private Long ownerId;
+	/*
+	 * Removed for security hardening
+	 * @Auther Shubham
+	 */
+	
+//	private Long ownerId;
 
 }

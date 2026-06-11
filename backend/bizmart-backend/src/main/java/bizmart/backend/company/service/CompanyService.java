@@ -13,17 +13,31 @@ import bizmart.backend.company.entity.Company;
 import bizmart.backend.company.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import bizmart.backend.auth.entity.User;
+import bizmart.backend.auth.repository.UserRepository;
+
+import bizmart.backend.auth.entity.Role;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
 
 	private final CompanyRepository companyRepository;
+	private final UserRepository userRepository;
 
 	public CompanyResponse createCompany(CompanyRequest request) {
 
+		User user = getCurrentUser();
+
+		if (user.getRole() != Role.SELLER) {
+			throw new RuntimeException("Only sellers can create companies");
+		}
+
 		Company company = Company.builder().companyName(request.getCompanyName()).industry(request.getIndustry())
 				.description(request.getDescription()).foundedYear(request.getFoundedYear())
-				.employeeCount(request.getEmployeeCount()).location(request.getLocation()).ownerId(request.getOwnerId())
+				.employeeCount(request.getEmployeeCount()).location(request.getLocation()).ownerId(user.getId())
 				.createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
 
 		Company savedCompany = companyRepository.save(company);
@@ -45,71 +59,99 @@ public class CompanyService {
 
 	public CompanyResponse getCompanyById(Long id) {
 
-	    Optional<Company> optionalCompany = companyRepository.findById(id);
+		Optional<Company> optionalCompany = companyRepository.findById(id);
 
-	    if (optionalCompany.isEmpty()) {
-	        throw new RuntimeException("Company not found");
-	    }
+		if (optionalCompany.isEmpty()) {
+			throw new RuntimeException("Company not found");
+		}
 
-	    Company company = optionalCompany.get();
+		Company company = optionalCompany.get();
 
-	    return mapToResponse(company);
+		return mapToResponse(company);
 	}
-	
-	public CompanyResponse updateCompany(
-	        Long id,
-	        CompanyRequest request) {
 
-	    Optional<Company> optionalCompany =
-	            companyRepository.findById(id);
+	public CompanyResponse updateCompany(Long id, CompanyRequest request) {
 
-	    if (optionalCompany.isEmpty()) {
-	        throw new RuntimeException("Company not found");
-	    }
+		Optional<Company> optionalCompany = companyRepository.findById(id);
 
-	    Company company =
-	            optionalCompany.get();
+		if (optionalCompany.isEmpty()) {
+			throw new RuntimeException("Company not found");
+		}
 
-	    company.setCompanyName(
-	            request.getCompanyName());
+		Company company = optionalCompany.get();
+		
+		User currentUser =
+				getCurrentUser();
 
-	    company.setIndustry(
-	            request.getIndustry());
+		if (!company.getOwnerId()
+				.equals(currentUser.getId())) {
 
-	    company.setDescription(
-	            request.getDescription());
+			throw new RuntimeException(
+					"You are not the owner of this company");
+		}
 
-	    company.setFoundedYear(
-	            request.getFoundedYear());
+		company.setCompanyName(request.getCompanyName());
 
-	    company.setEmployeeCount(
-	            request.getEmployeeCount());
+		company.setIndustry(request.getIndustry());
 
-	    company.setLocation(
-	            request.getLocation());
+		company.setDescription(request.getDescription());
 
-	    company.setOwnerId(
-	            request.getOwnerId());
+		company.setFoundedYear(request.getFoundedYear());
 
-	    company.setUpdatedAt(
-	            LocalDateTime.now());
+		company.setEmployeeCount(request.getEmployeeCount());
 
-	    Company updatedCompany =
-	            companyRepository.save(company);
+		company.setLocation(request.getLocation());
 
-	    return mapToResponse(updatedCompany);
+		/*
+		 * Removed for security hardening
+		 * 
+		 * @Auther Shubham
+		 */
+//	    company.setOwnerId(
+//	            request.getOwnerId());
+
+		company.setUpdatedAt(LocalDateTime.now());
+
+		Company updatedCompany = companyRepository.save(company);
+
+		return mapToResponse(updatedCompany);
 	}
-	
+
 	public void deleteCompany(Long id) {
 
-		Optional<Company> optionalCompany =
-				companyRepository.findById(id);
+		Optional<Company> optionalCompany = companyRepository.findById(id);
+		
+		Company company =
+				optionalCompany.get();
+
+		User currentUser =
+				getCurrentUser();
+
+		if (!company.getOwnerId()
+				.equals(currentUser.getId())) {
+
+			throw new RuntimeException(
+					"You are not the owner of this company");
+		}
 
 		if (optionalCompany.isEmpty()) {
 			throw new RuntimeException("Company not found");
 		}
 
 		companyRepository.deleteById(id);
+	}
+
+	private User getCurrentUser() {
+
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+
+		if (optionalUser.isEmpty()) {
+			throw new RuntimeException("User not found");
+		}
+
+		return optionalUser.get();
 	}
 
 	private CompanyResponse mapToResponse(Company company) {
@@ -120,19 +162,15 @@ public class CompanyService {
 				.location(company.getLocation()).ownerId(company.getOwnerId()).createdAt(company.getCreatedAt())
 				.updatedAt(company.getUpdatedAt()).build();
 	}
-	
-	public List<CompanyResponse> getCompaniesByOwnerId(
-			Long ownerId) {
 
-		List<Company> companies =
-				companyRepository.findByOwnerId(ownerId);
+	public List<CompanyResponse> getCompaniesByOwnerId(Long ownerId) {
 
-		List<CompanyResponse> responses =
-				new ArrayList<CompanyResponse>();
+		List<Company> companies = companyRepository.findByOwnerId(ownerId);
+
+		List<CompanyResponse> responses = new ArrayList<CompanyResponse>();
 
 		for (Company company : companies) {
-			responses.add(
-					mapToResponse(company));
+			responses.add(mapToResponse(company));
 		}
 
 		return responses;
