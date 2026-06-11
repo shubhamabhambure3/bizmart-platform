@@ -13,14 +13,56 @@ import bizmart.backend.listing.entity.Listing;
 import bizmart.backend.listing.repository.ListingRepository;
 import lombok.RequiredArgsConstructor;
 
+//import java.util.Optional;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import bizmart.backend.auth.entity.Role;
+import bizmart.backend.auth.entity.User;
+import bizmart.backend.auth.repository.UserRepository;
+import bizmart.backend.company.entity.Company;
+import bizmart.backend.company.repository.CompanyRepository;
+
 @Service
 @RequiredArgsConstructor
 public class ListingService {
 
 	private final ListingRepository listingRepository;
+	
+	private final UserRepository userRepository;
+
+	private final CompanyRepository companyRepository;
 
 	public ListingResponse createListing(
 			ListingRequest request) {
+		
+		User currentUser =
+				getCurrentUser();
+
+		if (currentUser.getRole() != Role.SELLER) {
+
+			throw new RuntimeException(
+					"Only sellers can create listings");
+		}
+
+		Optional<Company> optionalCompany =
+				companyRepository.findById(
+						request.getCompanyId());
+
+		if (optionalCompany.isEmpty()) {
+
+			throw new RuntimeException(
+					"Company not found");
+		}
+
+		Company company =
+				optionalCompany.get();
+
+		if (!company.getOwnerId()
+				.equals(currentUser.getId())) {
+
+			throw new RuntimeException(
+					"You are not the owner of this company");
+		}
 
 		Listing listing =
 				Listing.builder()
@@ -109,9 +151,36 @@ public class ListingService {
 
 		Listing listing =
 				optionalListing.get();
+		
+		User currentUser =
+		        getCurrentUser();
 
-		listing.setCompanyId(
-				request.getCompanyId());
+		Optional<Company> optionalCompany =
+		        companyRepository.findById(
+		                listing.getCompanyId());
+
+		if (optionalCompany.isEmpty()) {
+
+		    throw new RuntimeException(
+		            "Company not found");
+		}
+
+		Company company =
+		        optionalCompany.get();
+
+		if (!company.getOwnerId()
+		        .equals(currentUser.getId())) {
+
+		    throw new RuntimeException(
+		            "You are not the owner of this company");
+		}
+
+		/*
+		 * Security Hardening:
+		 * Company ownership cannot be changed
+		 */
+//		listing.setCompanyId(
+//				request.getCompanyId());
 
 		listing.setValuationId(
 				request.getValuationId());
@@ -134,17 +203,62 @@ public class ListingService {
 	}
 
 	public void deleteListing(
-			Long id) {
+	        Long id) {
 
-		Optional<Listing> optionalListing =
-				listingRepository.findById(id);
+	    Optional<Listing> optionalListing =
+	            listingRepository.findById(id);
 
-		if (optionalListing.isEmpty()) {
+	    if (optionalListing.isEmpty()) {
+	        throw new RuntimeException(
+	                "Listing not found");
+	    }
+
+	    Listing listing =
+	            optionalListing.get();
+
+	    User currentUser =
+	            getCurrentUser();
+
+	    Optional<Company> optionalCompany =
+	            companyRepository.findById(
+	                    listing.getCompanyId());
+
+	    if (optionalCompany.isEmpty()) {
+
+	        throw new RuntimeException(
+	                "Company not found");
+	    }
+
+	    Company company =
+	            optionalCompany.get();
+
+	    if (!company.getOwnerId()
+	            .equals(currentUser.getId())) {
+
+	        throw new RuntimeException(
+	                "You are not the owner of this company");
+	    }
+
+	    listingRepository.deleteById(id);
+	}
+	
+	private User getCurrentUser() {
+
+		String email =
+				SecurityContextHolder
+						.getContext()
+						.getAuthentication()
+						.getName();
+
+		Optional<User> optionalUser =
+				userRepository.findByEmail(email);
+
+		if (optionalUser.isEmpty()) {
 			throw new RuntimeException(
-					"Listing not found");
+					"User not found");
 		}
 
-		listingRepository.deleteById(id);
+		return optionalUser.get();
 	}
 
 	private ListingResponse mapToResponse(
