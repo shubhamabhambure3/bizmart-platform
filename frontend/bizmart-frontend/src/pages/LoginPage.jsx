@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { login, saveToken } from '../services/authService'
 import logo from '../assets/bizmart-logo.png'
 import './LoginPage.css'
+import { Link } from 'react-router-dom'
 
 function LoginPage() {
   const [email, setEmail] = useState('')
@@ -115,6 +116,20 @@ function LoginPage() {
               >
                 Login
               </button>
+
+              <div className="text-center mt-3">
+                <span className="text-muted">
+                  Don't have an account?
+                </span>
+
+                <Link
+                  to="/register"
+                  className="ms-2 text-decoration-none"
+                >
+                  Register
+                </Link>
+              </div>
+
             </form>
           </div>
         </div>
