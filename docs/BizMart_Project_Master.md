@@ -365,19 +365,63 @@ mapToResponse()
 ## Milestone 6 - React Frontend
 
 Status:
-NOT STARTED
+IN PROGRESS
 
 Tasks:
 
-* [ ] Login Page
-* [ ] Registration Page
 * [ ] Dashboard
-* [ ] Company Form
+
+* [x] React + Vite Setup
+* [x] Bootstrap 5 Integration
+* [x] React Router Configuration
+
+Authentication Module
+
+* [x] Login Page
+* [x] Login API Integration
+* [x] JWT Token Storage
+* [x] Protected Routes
+* [x] Logout Functionality
+
+Registration Module
+
+* [x] Registration Page
+* [x] Registration API Integration
+
+Navigation
+
+* [x] Navbar Component
+* [x] Dashboard Navigation
+* [x] Companies Navigation
+
+Company Management UI
+
+* [x] Companies Page
+* [x] Company Creation Form
+* [x] Company Service Layer
+* [x] Axios JWT Interceptor
+* [x] Company Creation API Integration
+* [x] Company Persistence Validation
+* [ ] Owner-specific Company Listing
+* [ ] Company Update UI
+* [ ] Company Delete UI
+
+Pending
+
 * [ ] Listings Page
+* [ ] Financials Page
+* [ ] Buyer Module UI
+* [ ] Matching UI
+* [ ] Admin Dashboard UI
+* [ ] UI Refinement
+
 
 ---
 
 ## Milestone 7 - Security Hardening
+
+Status:
+COMPLETED
 
 * [x] Derive owner from JWT
 * [x] Restrict company creation to SELLER
@@ -466,26 +510,28 @@ GET /api/matching/{buyerProfileId}
 
 # Pending APIs
 
-To be updated
+NA
 
 ---
 
 # Known Issues
 
-None
+* Company listing currently displays all companies using GET /api/companies
+* Owner-specific company visibility requires redesign
+* UI refinement intentionally deferred until MVP functionality completion
 
 ---
 
 # Current Status
 
 Current Milestone:
-Milestone 7 - Security Hardening
+Milestone 6 - React Frontend MVP
 
 Current Task:
-Security Hardening Review
+Companies Module Completion
 
 Next Task:
-Merge feature/security-hardening into main
+Owner-specific Company Listing
 
 # Git History
 
@@ -512,10 +558,12 @@ Repository:
 https://github.com/shubhamabhambure3/bizmart-platform
 
 Branch:
-main
+* feature/frontend-setup
+  feature/security-hardening
+  main
 
 Last Commit:
-Implement buyer matching engine
+feat(company): implement company creation workflow
 
 ## Project Handover Notes
 

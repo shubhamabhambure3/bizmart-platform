@@ -39,6 +39,27 @@ function Navbar() {
             Companies
           </button>
         </div>
+        <button
+          className="btn btn-link text-white text-decoration-none me-3"
+          onClick={() => navigate('/financials')}
+        >
+          Financials
+        </button>
+        <button
+          className="btn btn-link text-white text-decoration-none me-3"
+          onClick={() =>
+            navigate('/valuations')
+          }
+        >
+          Valuations
+        </button>
+
+        <button
+          className="btn btn-link text-white text-decoration-none me-3"
+          onClick={() => navigate('/listings')}
+        >
+          Listings
+        </button>
 
         <button
           className="btn btn-outline-light"

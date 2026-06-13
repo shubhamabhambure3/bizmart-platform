@@ -4,6 +4,11 @@ import RegisterPage from '../pages/RegisterPage'
 import DashboardPage from '../pages/DashboardPage'
 import ProtectedRoute from './ProtectedRoute'
 import CompaniesPage from '../pages/CompaniesPage'
+import FinancialPage
+  from '../pages/FinancialPage'
+import ValuationPage
+  from '../pages/ValuationPage'
+import ListingPage from '../pages/ListingPage'
 
 function AppRoutes() {
   return (
@@ -21,6 +26,30 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <CompaniesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/financials"
+        element={
+          <ProtectedRoute>
+            <FinancialPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/valuations"
+        element={
+          <ProtectedRoute>
+            <ValuationPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/listings"
+        element={
+          <ProtectedRoute>
+            <ListingPage />
           </ProtectedRoute>
         }
       />
