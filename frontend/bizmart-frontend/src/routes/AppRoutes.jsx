@@ -9,6 +9,8 @@ import FinancialPage
 import ValuationPage
   from '../pages/ValuationPage'
 import ListingPage from '../pages/ListingPage'
+import BuyerPage
+  from '../pages/BuyerPage'
 
 function AppRoutes() {
   return (
@@ -50,6 +52,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <ListingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/buyers"
+        element={
+          <ProtectedRoute>
+            <BuyerPage />
           </ProtectedRoute>
         }
       />

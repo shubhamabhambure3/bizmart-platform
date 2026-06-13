@@ -13,14 +13,75 @@ import bizmart.backend.interest.entity.Interest;
 import bizmart.backend.interest.repository.InterestRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import bizmart.backend.auth.entity.User;
+import bizmart.backend.auth.repository.UserRepository;
+
+import bizmart.backend.buyer.entity.BuyerProfile;
+import bizmart.backend.buyer.repository.BuyerProfileRepository;
+
 @Service
 @RequiredArgsConstructor
 public class InterestService {
 
 	private final InterestRepository interestRepository;
+	private final UserRepository userRepository;
+
+	private final BuyerProfileRepository
+	        buyerProfileRepository;
+	
+	private User getCurrentUser() {
+
+	    String email =
+	            SecurityContextHolder
+	                    .getContext()
+	                    .getAuthentication()
+	                    .getName();
+
+	    Optional<User> optionalUser =
+	            userRepository.findByEmail(
+	                    email);
+
+	    if (optionalUser.isEmpty()) {
+
+	        throw new RuntimeException(
+	                "User not found");
+	    }
+
+	    return optionalUser.get();
+	}
+	
+	
 
 	public InterestResponse createInterest(
 			InterestRequest request) {
+		
+		User currentUser =
+		        getCurrentUser();
+
+		Optional<BuyerProfile>
+		        optionalBuyerProfile =
+		                buyerProfileRepository
+		                        .findById(
+		                                request.getBuyerProfileId());
+
+		if (optionalBuyerProfile.isEmpty()) {
+
+		    throw new RuntimeException(
+		            "Buyer profile not found");
+		}
+
+		BuyerProfile buyerProfile =
+		        optionalBuyerProfile.get();
+
+		if (!buyerProfile.getUserId()
+		        .equals(currentUser.getId())) {
+
+		    throw new RuntimeException(
+		            "You are not the owner of this buyer profile");
+		}
+		
 
 		Interest interest =
 				Interest.builder()
@@ -128,12 +189,41 @@ public class InterestService {
 
 		Interest interest =
 				optionalInterest.get();
+		
+		User currentUser =
+		        getCurrentUser();
 
-		interest.setBuyerProfileId(
-				request.getBuyerProfileId());
+		Optional<BuyerProfile>
+		        optionalBuyerProfile =
+		                buyerProfileRepository
+		                        .findById(
+		                                interest.getBuyerProfileId());
 
-		interest.setListingId(
-				request.getListingId());
+		if (optionalBuyerProfile.isEmpty()) {
+
+		    throw new RuntimeException(
+		            "Buyer profile not found");
+		}
+
+		BuyerProfile buyerProfile =
+		        optionalBuyerProfile.get();
+
+		if (!buyerProfile.getUserId()
+		        .equals(currentUser.getId())) {
+
+		    throw new RuntimeException(
+		            "You are not the owner of this buyer profile");
+		}
+
+		/*
+		 * removed For security hardening
+		 */
+		
+//		interest.setBuyerProfileId(
+//				request.getBuyerProfileId());
+//
+//		interest.setListingId(
+//				request.getListingId());
 
 		interest.setMessage(
 				request.getMessage());
@@ -151,17 +241,39 @@ public class InterestService {
 
 	public void deleteInterest(
 			Long id) {
-
+		
 		Optional<Interest> optionalInterest =
 				interestRepository.findById(id);
 
-		if (optionalInterest.isEmpty()) {
-			throw new RuntimeException(
-					"Interest not found");
+		Interest interest =
+		        optionalInterest.get();
+
+		User currentUser =
+		        getCurrentUser();
+
+		Optional<BuyerProfile>
+		        optionalBuyerProfile =
+		                buyerProfileRepository
+		                        .findById(
+		                                interest.getBuyerProfileId());
+
+		if (optionalBuyerProfile.isEmpty()) {
+
+		    throw new RuntimeException(
+		            "Buyer profile not found");
 		}
 
-		interestRepository.deleteById(
-				id);
+		BuyerProfile buyerProfile =
+		        optionalBuyerProfile.get();
+
+		if (!buyerProfile.getUserId()
+		        .equals(currentUser.getId())) {
+
+		    throw new RuntimeException(
+		            "You are not the owner of this buyer profile");
+		}
+
+		interestRepository.deleteById(id);
 	}
 
 	private InterestResponse mapToResponse(

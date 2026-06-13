@@ -12,159 +12,136 @@ import bizmart.backend.buyer.dto.BuyerProfileResponse;
 import bizmart.backend.buyer.entity.BuyerProfile;
 import bizmart.backend.buyer.repository.BuyerProfileRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import bizmart.backend.auth.entity.User;
+import bizmart.backend.auth.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class BuyerProfileService {
 
 	private final BuyerProfileRepository buyerProfileRepository;
+	private final UserRepository userRepository;
 
-	public BuyerProfileResponse createBuyerProfile(
-			BuyerProfileRequest request) {
+	public BuyerProfileResponse createBuyerProfile(BuyerProfileRequest request) {
 
-		BuyerProfile buyerProfile =
-				BuyerProfile.builder()
-						.userId(
-								request.getUserId())
-						.investmentBudget(
-								request.getInvestmentBudget())
-						.preferredIndustry(
-								request.getPreferredIndustry())
-						.location(
-								request.getLocation())
-						.createdAt(
-								LocalDateTime.now())
-						.updatedAt(
-								LocalDateTime.now())
-						.build();
+		User currentUser = getCurrentUser();
 
-		BuyerProfile savedBuyerProfile =
-				buyerProfileRepository.save(
-						buyerProfile);
+		BuyerProfile buyerProfile = BuyerProfile.builder().userId(currentUser.getId())
+				.investmentBudget(request.getInvestmentBudget()).preferredIndustry(request.getPreferredIndustry())
+				.location(request.getLocation()).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
 
-		return mapToResponse(
-				savedBuyerProfile);
+		BuyerProfile savedBuyerProfile = buyerProfileRepository.save(buyerProfile);
+
+		return mapToResponse(savedBuyerProfile);
 	}
 
 	public List<BuyerProfileResponse> getAllBuyerProfiles() {
 
-		List<BuyerProfile> buyerProfiles =
-				buyerProfileRepository.findAll();
+		List<BuyerProfile> buyerProfiles = buyerProfileRepository.findAll();
 
-		List<BuyerProfileResponse> responses =
-				new ArrayList<BuyerProfileResponse>();
+		List<BuyerProfileResponse> responses = new ArrayList<BuyerProfileResponse>();
 
 		for (BuyerProfile buyerProfile : buyerProfiles) {
-			responses.add(
-					mapToResponse(
-							buyerProfile));
+			responses.add(mapToResponse(buyerProfile));
 		}
 
 		return responses;
 	}
 
-	public BuyerProfileResponse getBuyerProfileById(
-			Long id) {
+	public BuyerProfileResponse getBuyerProfileById(Long id) {
 
-		Optional<BuyerProfile> optionalBuyerProfile =
-				buyerProfileRepository.findById(id);
+		Optional<BuyerProfile> optionalBuyerProfile = buyerProfileRepository.findById(id);
 
 		if (optionalBuyerProfile.isEmpty()) {
-			throw new RuntimeException(
-					"Buyer profile not found");
+			throw new RuntimeException("Buyer profile not found");
 		}
 
-		return mapToResponse(
-				optionalBuyerProfile.get());
+		return mapToResponse(optionalBuyerProfile.get());
 	}
 
-	public BuyerProfileResponse getBuyerProfileByUserId(
-			Long userId) {
+	public BuyerProfileResponse getBuyerProfileByUserId(Long userId) {
 
-		Optional<BuyerProfile> optionalBuyerProfile =
-				buyerProfileRepository.findByUserId(
-						userId);
+		Optional<BuyerProfile> optionalBuyerProfile = buyerProfileRepository.findByUserId(userId);
 
 		if (optionalBuyerProfile.isEmpty()) {
-			throw new RuntimeException(
-					"Buyer profile not found");
+			throw new RuntimeException("Buyer profile not found");
 		}
 
-		return mapToResponse(
-				optionalBuyerProfile.get());
+		return mapToResponse(optionalBuyerProfile.get());
 	}
 
-	public BuyerProfileResponse updateBuyerProfile(
-			Long id,
-			BuyerProfileRequest request) {
+	public BuyerProfileResponse updateBuyerProfile(Long id, BuyerProfileRequest request) {
 
-		Optional<BuyerProfile> optionalBuyerProfile =
-				buyerProfileRepository.findById(id);
+		Optional<BuyerProfile> optionalBuyerProfile = buyerProfileRepository.findById(id);
 
 		if (optionalBuyerProfile.isEmpty()) {
-			throw new RuntimeException(
-					"Buyer profile not found");
+			throw new RuntimeException("Buyer profile not found");
 		}
 
-		BuyerProfile buyerProfile =
-				optionalBuyerProfile.get();
+		BuyerProfile buyerProfile = optionalBuyerProfile.get();
 
-		buyerProfile.setUserId(
-				request.getUserId());
+		User currentUser = getCurrentUser();
 
-		buyerProfile.setInvestmentBudget(
-				request.getInvestmentBudget());
+		if (!buyerProfile.getUserId().equals(currentUser.getId())) {
 
-		buyerProfile.setPreferredIndustry(
-				request.getPreferredIndustry());
+			throw new RuntimeException("You are not the owner of this profile");
+		}
 
-		buyerProfile.setLocation(
-				request.getLocation());
+		buyerProfile.setInvestmentBudget(request.getInvestmentBudget());
 
-		buyerProfile.setUpdatedAt(
-				LocalDateTime.now());
+		buyerProfile.setPreferredIndustry(request.getPreferredIndustry());
 
-		BuyerProfile updatedBuyerProfile =
-				buyerProfileRepository.save(
-						buyerProfile);
+		buyerProfile.setLocation(request.getLocation());
 
-		return mapToResponse(
-				updatedBuyerProfile);
+		buyerProfile.setUpdatedAt(LocalDateTime.now());
+
+		BuyerProfile updatedBuyerProfile = buyerProfileRepository.save(buyerProfile);
+
+		return mapToResponse(updatedBuyerProfile);
 	}
 
-	public void deleteBuyerProfile(
-			Long id) {
+	public void deleteBuyerProfile(Long id) {
 
-		Optional<BuyerProfile> optionalBuyerProfile =
-				buyerProfileRepository.findById(id);
+		Optional<BuyerProfile> optionalBuyerProfile = buyerProfileRepository.findById(id);
 
 		if (optionalBuyerProfile.isEmpty()) {
-			throw new RuntimeException(
-					"Buyer profile not found");
+			throw new RuntimeException("Buyer profile not found");
 		}
 
-		buyerProfileRepository.deleteById(
-				id);
+		BuyerProfile buyerProfile = optionalBuyerProfile.get();
+
+		User currentUser = getCurrentUser();
+
+		if (!buyerProfile.getUserId().equals(currentUser.getId())) {
+
+			throw new RuntimeException("You are not the owner of this profile");
+		}
+
+		buyerProfileRepository.deleteById(id);
 	}
 
-	private BuyerProfileResponse mapToResponse(
-			BuyerProfile buyerProfile) {
+	private User getCurrentUser() {
 
-		return BuyerProfileResponse.builder()
-				.id(
-						buyerProfile.getId())
-				.userId(
-						buyerProfile.getUserId())
-				.investmentBudget(
-						buyerProfile.getInvestmentBudget())
-				.preferredIndustry(
-						buyerProfile.getPreferredIndustry())
-				.location(
-						buyerProfile.getLocation())
-				.createdAt(
-						buyerProfile.getCreatedAt())
-				.updatedAt(
-						buyerProfile.getUpdatedAt())
-				.build();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+		Optional<User> optionalUser = userRepository.findByEmail(email);
+
+		if (optionalUser.isEmpty()) {
+
+			throw new RuntimeException("User not found");
+		}
+
+		return optionalUser.get();
 	}
+
+	private BuyerProfileResponse mapToResponse(BuyerProfile buyerProfile) {
+
+		return BuyerProfileResponse.builder().id(buyerProfile.getId()).userId(buyerProfile.getUserId())
+				.investmentBudget(buyerProfile.getInvestmentBudget())
+				.preferredIndustry(buyerProfile.getPreferredIndustry()).location(buyerProfile.getLocation())
+				.createdAt(buyerProfile.getCreatedAt()).updatedAt(buyerProfile.getUpdatedAt()).build();
+	}
+
 }
