@@ -6,38 +6,115 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import bizmart.backend.auth.repository.UserRepository;
 import bizmart.backend.interest.dto.InterestRequest;
 import bizmart.backend.interest.dto.InterestResponse;
 import bizmart.backend.interest.entity.InterestStatus;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import bizmart.backend.auth.entity.Role;
+import bizmart.backend.auth.entity.User;
+
+import bizmart.backend.buyer.entity.BuyerProfile;
+import bizmart.backend.buyer.repository.BuyerProfileRepository;
 
 @SpringBootTest
 class InterestServiceTest {
 
 	@Autowired
 	private InterestService interestService;
-
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private BuyerProfileRepository buyerProfileRepository;
+	
+	/*
+	 * @Test void shouldCreateInterest() {
+	 * 
+	 * InterestRequest request = new InterestRequest();
+	 * 
+	 * request.setBuyerProfileId(1L);
+	 * 
+	 * request.setListingId(1L);
+	 * 
+	 * request.setMessage( "Interested in acquisition discussion");
+	 * 
+	 * request.setStatus( InterestStatus.PENDING);
+	 * 
+	 * InterestResponse response = interestService.createInterest( request);
+	 * 
+	 * assertNotNull(response);
+	 * 
+	 * assertNotNull(response.getId()); }
+	 */
+	
 	@Test
 	void shouldCreateInterest() {
 
-		InterestRequest request =
-				new InterestRequest();
+	    Authentication authentication =
+	            mock(Authentication.class);
 
-		request.setBuyerProfileId(1L);
+	    when(authentication.getName())
+	            .thenReturn("interesttest@gmail.com");
 
-		request.setListingId(1L);
+	    SecurityContext securityContext =
+	            mock(SecurityContext.class);
 
-		request.setMessage(
-				"Interested in acquisition discussion");
+	    when(securityContext.getAuthentication())
+	            .thenReturn(authentication);
 
-		request.setStatus(
-				InterestStatus.PENDING);
+	    SecurityContextHolder.setContext(
+	            securityContext);
 
-		InterestResponse response =
-				interestService.createInterest(
-						request);
+	    InterestRequest request =
+	            new InterestRequest();
 
-		assertNotNull(response);
+//	    request.setBuyerProfileId(1L);
 
-		assertNotNull(response.getId());
+	    request.setListingId(1L);
+
+	    request.setMessage(
+	            "Interested in acquisition discussion");
+
+	    request.setStatus(
+	            InterestStatus.PENDING);
+	    
+	    User user =
+	            User.builder()
+	                    .fullName("Interest Buyer")
+	                    .email("interesttest@gmail.com")
+	                    .mobile("7777777777")
+	                    .password("password")
+	                    .role(Role.BUYER)
+	                    .isActive(true)
+	                    .build();
+
+	    userRepository.save(user);
+	    
+	    BuyerProfile buyerProfile =
+	            BuyerProfile.builder()
+	                    .userId(user.getId())
+	                    .build();
+
+	    buyerProfile =
+	            buyerProfileRepository.save(
+	                    buyerProfile);
+
+	    request.setBuyerProfileId(
+	            buyerProfile.getId());
+
+	    InterestResponse response =
+	            interestService.createInterest(
+	                    request);
+
+	    assertNotNull(response);
+
+	    assertNotNull(response.getId());
 	}
 }

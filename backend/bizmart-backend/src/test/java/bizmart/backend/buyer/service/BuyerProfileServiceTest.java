@@ -11,32 +11,81 @@ import org.springframework.boot.test.context.SpringBootTest;
 import bizmart.backend.buyer.dto.BuyerProfileRequest;
 import bizmart.backend.buyer.dto.BuyerProfileResponse;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import bizmart.backend.auth.entity.Role;
+import bizmart.backend.auth.entity.User;
+import bizmart.backend.auth.repository.UserRepository;
+
 @SpringBootTest
 class BuyerProfileServiceTest {
 
 	@Autowired
 	private BuyerProfileService buyerProfileService;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	/*
+	 * @Test void shouldCreateBuyerProfile() {
+	 * 
+	 * BuyerProfileRequest request = new BuyerProfileRequest();
+	 * 
+	 * request.setUserId(1L);
+	 * 
+	 * request.setInvestmentBudget( BigDecimal.valueOf(50000000));
+	 * 
+	 * request.setPreferredIndustry( "IT Services");
+	 * 
+	 * request.setLocation( "Pune");
+	 * 
+	 * BuyerProfileResponse response = buyerProfileService.createBuyerProfile(
+	 * request);
+	 * 
+	 * assertNotNull(response);
+	 * 
+	 * assertNotNull(response.getId()); }
+	 */
 
 	@Test
 	void shouldCreateBuyerProfile() {
 
-		BuyerProfileRequest request =
-				new BuyerProfileRequest();
+		Authentication authentication = mock(Authentication.class);
 
-		request.setUserId(1L);
+		when(authentication.getName()).thenReturn("interestbuyer@gmail.com");
 
-		request.setInvestmentBudget(
-				BigDecimal.valueOf(50000000));
+		SecurityContext securityContext = mock(SecurityContext.class);
 
-		request.setPreferredIndustry(
-				"IT Services");
+		when(securityContext.getAuthentication()).thenReturn(authentication);
 
-		request.setLocation(
-				"Pune");
+		SecurityContextHolder.setContext(securityContext);
 
-		BuyerProfileResponse response =
-				buyerProfileService.createBuyerProfile(
-						request);
+		BuyerProfileRequest request = new BuyerProfileRequest();
+
+		request.setInvestmentBudget(BigDecimal.valueOf(50000000));
+
+		request.setPreferredIndustry("IT Services");
+
+		request.setLocation("Pune");
+		
+		User user =
+		        User.builder()
+		                .fullName("Test Buyer")
+		                .email("interestbuyer@gmail.com")
+		                .mobile("9999999999")
+		                .password("password")
+		                .role(Role.BUYER)
+		                .isActive(true)
+		                .build();
+
+		userRepository.save(user);
+
+		BuyerProfileResponse response = buyerProfileService.createBuyerProfile(request);
 
 		assertNotNull(response);
 
