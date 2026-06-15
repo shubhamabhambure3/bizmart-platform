@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import bizmart.backend.auth.entity.Role;
 import bizmart.backend.auth.entity.User;
 import bizmart.backend.auth.repository.UserRepository;
 
@@ -28,270 +29,221 @@ public class InterestService {
 	private final InterestRepository interestRepository;
 	private final UserRepository userRepository;
 
-	private final BuyerProfileRepository
-	        buyerProfileRepository;
-	
+	private final BuyerProfileRepository buyerProfileRepository;
+
 	private User getCurrentUser() {
 
-	    String email =
-	            SecurityContextHolder
-	                    .getContext()
-	                    .getAuthentication()
-	                    .getName();
+		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-	    Optional<User> optionalUser =
-	            userRepository.findByEmail(
-	                    email);
+		Optional<User> optionalUser = userRepository.findByEmail(email);
 
-	    if (optionalUser.isEmpty()) {
+		if (optionalUser.isEmpty()) {
 
-	        throw new RuntimeException(
-	                "User not found");
-	    }
+			throw new RuntimeException("User not found");
+		}
 
-	    return optionalUser.get();
+		return optionalUser.get();
 	}
-	
-	
 
-	public InterestResponse createInterest(
-			InterestRequest request) {
-		
-		User currentUser =
-		        getCurrentUser();
+	public InterestResponse createInterest(InterestRequest request) {
 
-		Optional<BuyerProfile>
-		        optionalBuyerProfile =
-		                buyerProfileRepository
-		                        .findById(
-		                                request.getBuyerProfileId());
+		User currentUser = getCurrentUser();
+
+		Optional<BuyerProfile> optionalBuyerProfile = buyerProfileRepository.findById(request.getBuyerProfileId());
 
 		if (optionalBuyerProfile.isEmpty()) {
 
-		    throw new RuntimeException(
-		            "Buyer profile not found");
+			throw new RuntimeException("Buyer profile not found");
 		}
 
-		BuyerProfile buyerProfile =
-		        optionalBuyerProfile.get();
+		BuyerProfile buyerProfile = optionalBuyerProfile.get();
 
-		if (!buyerProfile.getUserId()
-		        .equals(currentUser.getId())) {
+		if (!buyerProfile.getUserId().equals(currentUser.getId())) {
 
-		    throw new RuntimeException(
-		            "You are not the owner of this buyer profile");
+			throw new RuntimeException("You are not the owner of this buyer profile");
 		}
-		
 
-		Interest interest =
-				Interest.builder()
-						.buyerProfileId(
-								request.getBuyerProfileId())
-						.listingId(
-								request.getListingId())
-						.message(
-								request.getMessage())
-						.status(
-								request.getStatus())
-						.createdAt(
-								LocalDateTime.now())
-						.build();
+		Interest interest = Interest.builder().buyerProfileId(request.getBuyerProfileId())
+				.listingId(request.getListingId()).message(request.getMessage()).status(request.getStatus())
+				.createdAt(LocalDateTime.now()).build();
 
-		Interest savedInterest =
-				interestRepository.save(
-						interest);
+		Interest savedInterest = interestRepository.save(interest);
 
-		return mapToResponse(
-				savedInterest);
+		return mapToResponse(savedInterest);
 	}
 
+	/*
+	 * Removed for security hardening
+	 */
+
+	/*
+	 * 
+	 * 
+	 * 
+	 * public List<InterestResponse> getAllInterests() {
+	 * 
+	 * List<Interest> interests = interestRepository.findAll();
+	 * 
+	 * List<InterestResponse> responses = new ArrayList<InterestResponse>();
+	 * 
+	 * for (Interest interest : interests) { responses.add( mapToResponse(
+	 * interest)); }
+	 * 
+	 * return responses; }
+	 * 
+	 */
+	
 	public List<InterestResponse> getAllInterests() {
 
-		List<Interest> interests =
-				interestRepository.findAll();
+	    User currentUser =
+	            getCurrentUser();
 
-		List<InterestResponse> responses =
-				new ArrayList<InterestResponse>();
+	    List<InterestResponse> responses =
+	            new ArrayList<>();
 
-		for (Interest interest : interests) {
-			responses.add(
-					mapToResponse(
-							interest));
-		}
+	    List<Interest> interests =
+	            interestRepository.findAll();
 
-		return responses;
+	    for (Interest interest : interests) {
+
+	        Optional<BuyerProfile> optionalBuyerProfile =
+	                buyerProfileRepository.findById(
+	                        interest.getBuyerProfileId());
+
+	        if (optionalBuyerProfile.isEmpty()) {
+	            continue;
+	        }
+
+	        BuyerProfile buyerProfile =
+	                optionalBuyerProfile.get();
+
+	        if (currentUser.getRole() == Role.BUYER
+	                || currentUser.getRole() == Role.SELLER) {
+
+	            if (buyerProfile.getUserId()
+	                    .equals(currentUser.getId())) {
+
+	                responses.add(
+	                        mapToResponse(
+	                                interest));
+	            }
+	        }
+	    }
+
+	    return responses;
 	}
 
-	public InterestResponse getInterestById(
-			Long id) {
+	public InterestResponse getInterestById(Long id) {
 
-		Optional<Interest> optionalInterest =
-				interestRepository.findById(id);
+		Optional<Interest> optionalInterest = interestRepository.findById(id);
 
 		if (optionalInterest.isEmpty()) {
-			throw new RuntimeException(
-					"Interest not found");
+			throw new RuntimeException("Interest not found");
 		}
 
-		return mapToResponse(
-				optionalInterest.get());
+		return mapToResponse(optionalInterest.get());
 	}
 
-	public List<InterestResponse> getInterestsByBuyerProfileId(
-			Long buyerProfileId) {
+	public List<InterestResponse> getInterestsByBuyerProfileId(Long buyerProfileId) {
 
-		List<Interest> interests =
-				interestRepository.findByBuyerProfileId(
-						buyerProfileId);
+		List<Interest> interests = interestRepository.findByBuyerProfileId(buyerProfileId);
 
-		List<InterestResponse> responses =
-				new ArrayList<InterestResponse>();
+		List<InterestResponse> responses = new ArrayList<InterestResponse>();
 
 		for (Interest interest : interests) {
-			responses.add(
-					mapToResponse(
-							interest));
+			responses.add(mapToResponse(interest));
 		}
 
 		return responses;
 	}
 
-	public List<InterestResponse> getInterestsByListingId(
-			Long listingId) {
+	public List<InterestResponse> getInterestsByListingId(Long listingId) {
 
-		List<Interest> interests =
-				interestRepository.findByListingId(
-						listingId);
+		List<Interest> interests = interestRepository.findByListingId(listingId);
 
-		List<InterestResponse> responses =
-				new ArrayList<InterestResponse>();
+		List<InterestResponse> responses = new ArrayList<InterestResponse>();
 
 		for (Interest interest : interests) {
-			responses.add(
-					mapToResponse(
-							interest));
+			responses.add(mapToResponse(interest));
 		}
 
 		return responses;
 	}
 
-	public InterestResponse updateInterest(
-			Long id,
-			InterestRequest request) {
+	public InterestResponse updateInterest(Long id, InterestRequest request) {
 
-		Optional<Interest> optionalInterest =
-				interestRepository.findById(id);
+		Optional<Interest> optionalInterest = interestRepository.findById(id);
 
 		if (optionalInterest.isEmpty()) {
-			throw new RuntimeException(
-					"Interest not found");
+			throw new RuntimeException("Interest not found");
 		}
 
-		Interest interest =
-				optionalInterest.get();
-		
-		User currentUser =
-		        getCurrentUser();
+		Interest interest = optionalInterest.get();
 
-		Optional<BuyerProfile>
-		        optionalBuyerProfile =
-		                buyerProfileRepository
-		                        .findById(
-		                                interest.getBuyerProfileId());
+		User currentUser = getCurrentUser();
+
+		Optional<BuyerProfile> optionalBuyerProfile = buyerProfileRepository.findById(interest.getBuyerProfileId());
 
 		if (optionalBuyerProfile.isEmpty()) {
 
-		    throw new RuntimeException(
-		            "Buyer profile not found");
+			throw new RuntimeException("Buyer profile not found");
 		}
 
-		BuyerProfile buyerProfile =
-		        optionalBuyerProfile.get();
+		BuyerProfile buyerProfile = optionalBuyerProfile.get();
 
-		if (!buyerProfile.getUserId()
-		        .equals(currentUser.getId())) {
+		if (!buyerProfile.getUserId().equals(currentUser.getId())) {
 
-		    throw new RuntimeException(
-		            "You are not the owner of this buyer profile");
+			throw new RuntimeException("You are not the owner of this buyer profile");
 		}
 
 		/*
 		 * removed For security hardening
 		 */
-		
+
 //		interest.setBuyerProfileId(
 //				request.getBuyerProfileId());
 //
 //		interest.setListingId(
 //				request.getListingId());
 
-		interest.setMessage(
-				request.getMessage());
+		interest.setMessage(request.getMessage());
 
-		interest.setStatus(
-				request.getStatus());
+		interest.setStatus(request.getStatus());
 
-		Interest updatedInterest =
-				interestRepository.save(
-						interest);
+		Interest updatedInterest = interestRepository.save(interest);
 
-		return mapToResponse(
-				updatedInterest);
+		return mapToResponse(updatedInterest);
 	}
 
-	public void deleteInterest(
-			Long id) {
-		
-		Optional<Interest> optionalInterest =
-				interestRepository.findById(id);
+	public void deleteInterest(Long id) {
 
-		Interest interest =
-		        optionalInterest.get();
+		Optional<Interest> optionalInterest = interestRepository.findById(id);
 
-		User currentUser =
-		        getCurrentUser();
+		Interest interest = optionalInterest.get();
 
-		Optional<BuyerProfile>
-		        optionalBuyerProfile =
-		                buyerProfileRepository
-		                        .findById(
-		                                interest.getBuyerProfileId());
+		User currentUser = getCurrentUser();
+
+		Optional<BuyerProfile> optionalBuyerProfile = buyerProfileRepository.findById(interest.getBuyerProfileId());
 
 		if (optionalBuyerProfile.isEmpty()) {
 
-		    throw new RuntimeException(
-		            "Buyer profile not found");
+			throw new RuntimeException("Buyer profile not found");
 		}
 
-		BuyerProfile buyerProfile =
-		        optionalBuyerProfile.get();
+		BuyerProfile buyerProfile = optionalBuyerProfile.get();
 
-		if (!buyerProfile.getUserId()
-		        .equals(currentUser.getId())) {
+		if (!buyerProfile.getUserId().equals(currentUser.getId())) {
 
-		    throw new RuntimeException(
-		            "You are not the owner of this buyer profile");
+			throw new RuntimeException("You are not the owner of this buyer profile");
 		}
 
 		interestRepository.deleteById(id);
 	}
 
-	private InterestResponse mapToResponse(
-			Interest interest) {
+	private InterestResponse mapToResponse(Interest interest) {
 
-		return InterestResponse.builder()
-				.id(
-						interest.getId())
-				.buyerProfileId(
-						interest.getBuyerProfileId())
-				.listingId(
-						interest.getListingId())
-				.message(
-						interest.getMessage())
-				.status(
-						interest.getStatus())
-				.createdAt(
-						interest.getCreatedAt())
-				.build();
+		return InterestResponse.builder().id(interest.getId()).buyerProfileId(interest.getBuyerProfileId())
+				.listingId(interest.getListingId()).message(interest.getMessage()).status(interest.getStatus())
+				.createdAt(interest.getCreatedAt()).build();
 	}
 }

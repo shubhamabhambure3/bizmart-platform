@@ -14,6 +14,7 @@ import bizmart.backend.buyer.repository.BuyerProfileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import bizmart.backend.auth.entity.Role;
 import bizmart.backend.auth.entity.User;
 import bizmart.backend.auth.repository.UserRepository;
 
@@ -37,18 +38,64 @@ public class BuyerProfileService {
 		return mapToResponse(savedBuyerProfile);
 	}
 
+	/*
+	 * For security hardening replaced
+	 */
+	/*
+	 * public List<BuyerProfileResponse> getAllBuyerProfiles() {
+	 * 
+	 * List<BuyerProfile> buyerProfiles = buyerProfileRepository.findAll();
+	 * 
+	 * List<BuyerProfileResponse> responses = new ArrayList<BuyerProfileResponse>();
+	 * 
+	 * for (BuyerProfile buyerProfile : buyerProfiles) {
+	 * responses.add(mapToResponse(buyerProfile)); }
+	 * 
+	 * return responses; }
+	 */
+	
 	public List<BuyerProfileResponse> getAllBuyerProfiles() {
 
-		List<BuyerProfile> buyerProfiles = buyerProfileRepository.findAll();
+	    User currentUser =
+	            getCurrentUser();
 
-		List<BuyerProfileResponse> responses = new ArrayList<BuyerProfileResponse>();
+	    List<BuyerProfileResponse> responses =
+	            new ArrayList<>();
 
-		for (BuyerProfile buyerProfile : buyerProfiles) {
-			responses.add(mapToResponse(buyerProfile));
-		}
+	    if (currentUser.getRole() == Role.ADMIN) {
 
-		return responses;
+	        List<BuyerProfile> buyerProfiles =
+	                buyerProfileRepository.findAll();
+
+	        for (BuyerProfile buyerProfile : buyerProfiles) {
+	            responses.add(
+	                    mapToResponse(
+	                            buyerProfile));
+	        }
+
+	        return responses;
+	    }
+
+	    if (currentUser.getRole() == Role.BUYER
+	            || currentUser.getRole() == Role.SELLER) {
+
+	        Optional<BuyerProfile> optionalBuyerProfile =
+	                buyerProfileRepository.findByUserId(
+	                        currentUser.getId());
+
+	        if (optionalBuyerProfile.isPresent()) {
+
+	            responses.add(
+	                    mapToResponse(
+	                            optionalBuyerProfile.get()));
+	        }
+
+	        return responses;
+	    }
+
+	    return responses;
 	}
+	
 
 	public BuyerProfileResponse getBuyerProfileById(Long id) {
 
