@@ -29,6 +29,16 @@ public class ValuationService {
 		Optional<Financial> optionalFinancial =
 				financialRepository.findByCompanyId(
 						request.getCompanyId());
+		
+		Optional<Valuation> existingValuation =
+		        valuationRepository.findByCompanyId(
+		                request.getCompanyId());
+
+		if (existingValuation.isPresent()) {
+
+		    throw new RuntimeException(
+		            "Valuation already exists for this company");
+		}
 
 		if (optionalFinancial.isEmpty()) {
 			throw new RuntimeException(

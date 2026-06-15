@@ -25,17 +25,44 @@ public class BuyerProfileService {
 	private final BuyerProfileRepository buyerProfileRepository;
 	private final UserRepository userRepository;
 
-	public BuyerProfileResponse createBuyerProfile(BuyerProfileRequest request) {
+	public BuyerProfileResponse createBuyerProfile(
+	        BuyerProfileRequest request) {
 
-		User currentUser = getCurrentUser();
+	    User currentUser =
+	            getCurrentUser();
 
-		BuyerProfile buyerProfile = BuyerProfile.builder().userId(currentUser.getId())
-				.investmentBudget(request.getInvestmentBudget()).preferredIndustry(request.getPreferredIndustry())
-				.location(request.getLocation()).createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+	    Optional<BuyerProfile> existingProfile =
+	            buyerProfileRepository.findByUserId(
+	                    currentUser.getId());
 
-		BuyerProfile savedBuyerProfile = buyerProfileRepository.save(buyerProfile);
+	    if (existingProfile.isPresent()) {
 
-		return mapToResponse(savedBuyerProfile);
+	        throw new RuntimeException(
+	                "Buyer profile already exists");
+	    }
+
+	    BuyerProfile buyerProfile =
+	            BuyerProfile.builder()
+	                    .userId(
+	                            currentUser.getId())
+	                    .investmentBudget(
+	                            request.getInvestmentBudget())
+	                    .preferredIndustry(
+	                            request.getPreferredIndustry())
+	                    .location(
+	                            request.getLocation())
+	                    .createdAt(
+	                            LocalDateTime.now())
+	                    .updatedAt(
+	                            LocalDateTime.now())
+	                    .build();
+
+	    BuyerProfile savedBuyerProfile =
+	            buyerProfileRepository.save(
+	                    buyerProfile);
+
+	    return mapToResponse(
+	            savedBuyerProfile);
 	}
 
 	/*

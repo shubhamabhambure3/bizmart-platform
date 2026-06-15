@@ -14,6 +14,11 @@ import bizmart.backend.listing.entity.Listing;
 import bizmart.backend.listing.repository.ListingRepository;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import bizmart.backend.auth.entity.User;
+import bizmart.backend.auth.repository.UserRepository;
+
 @Service
 @RequiredArgsConstructor
 public class MatchingService {
@@ -23,6 +28,8 @@ public class MatchingService {
 	private final ListingRepository listingRepository;
 
 	private final CompanyRepository companyRepository;
+	
+	private final UserRepository userRepository;
 
 	public List<Listing> getMatchingListings(
 			Long buyerProfileId) {
@@ -38,6 +45,16 @@ public class MatchingService {
 
 		BuyerProfile buyer =
 				optionalBuyer.get();
+		
+		User currentUser =
+		        getCurrentUser();
+
+		if (!buyer.getUserId()
+		        .equals(currentUser.getId())) {
+
+		    throw new RuntimeException(
+		            "You are not the owner of this buyer profile");
+		}
 
 		List<Listing> listings =
 				listingRepository.findAll();
@@ -75,5 +92,26 @@ public class MatchingService {
 		}
 
 		return matches;
+	}
+	
+	private User getCurrentUser() {
+
+	    String email =
+	            SecurityContextHolder
+	                    .getContext()
+	                    .getAuthentication()
+	                    .getName();
+
+	    Optional<User> optionalUser =
+	            userRepository.findByEmail(
+	                    email);
+
+	    if (optionalUser.isEmpty()) {
+
+	        throw new RuntimeException(
+	                "User not found");
+	    }
+
+	    return optionalUser.get();
 	}
 }

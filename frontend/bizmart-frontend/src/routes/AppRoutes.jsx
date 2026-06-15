@@ -13,6 +13,8 @@ import BuyerPage
   from '../pages/BuyerPage'
 import InterestPage
   from '../pages/InterestPage'
+import MatchingPage
+  from '../pages/MatchingPage'
 
 function AppRoutes() {
   return (
@@ -70,6 +72,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <InterestPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/matching"
+        element={
+          <ProtectedRoute>
+            <MatchingPage />
           </ProtectedRoute>
         }
       />

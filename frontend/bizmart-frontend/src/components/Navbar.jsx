@@ -78,6 +78,14 @@ function Navbar() {
         </button>
 
         <button
+          className="btn btn-link text-white text-decoration-none me-3"
+          onClick={() =>
+            navigate('/matching')
+          }
+        >
+          Matching
+        </button>
+        <button
           className="btn btn-outline-light"
           onClick={handleLogout}
         >
