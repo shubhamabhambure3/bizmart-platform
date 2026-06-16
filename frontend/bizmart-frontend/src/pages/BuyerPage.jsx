@@ -8,6 +8,9 @@ import {
   deleteBuyerProfile
 } from '../services/buyerService'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
 function BuyerPage() {
 
   const [profiles, setProfiles] =
@@ -183,7 +186,7 @@ function BuyerPage() {
 
       <div className="container mt-4">
 
-        <h1>Buyer Profiles</h1>
+        <h1 className="page-title">Buyer Profiles</h1>
 
         {success && (
           <div className="alert alert-success">
@@ -279,7 +282,7 @@ function BuyerPage() {
 
           <div className="card-body">
 
-            <h5>
+            <h5 className="page-title">
               Buyer Profiles
             </h5>
 
@@ -291,7 +294,7 @@ function BuyerPage() {
 
                 <tr>
 
-                  <th>ID</th>
+                  <th>Profile ID</th>
 
                   <th>Budget</th>
 
@@ -319,7 +322,7 @@ function BuyerPage() {
                       </td>
 
                       <td>
-                        {profile.investmentBudget}
+                        {formatCurrency(profile.investmentBudget)}
                       </td>
 
                       <td>

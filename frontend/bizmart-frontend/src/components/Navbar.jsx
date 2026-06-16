@@ -11,18 +11,15 @@ function Navbar() {
   }
 
   return (
-    <nav
-      className="navbar navbar-expand-lg navbar-dark bg-dark"
-      style={{
-        overflowX: 'auto',
-        whiteSpace: 'nowrap'
-      }}
-    >
-      <div
-        className="container-fluid d-flex align-items-center"
-      >
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
 
-        <div className="navbar-brand d-flex align-items-center">
+      <div className="container-fluid">
+
+        <div
+          className="navbar-brand d-flex align-items-center"
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate('/dashboard')}
+        >
           <img
             src={logo}
             alt="BizMart"
@@ -33,84 +30,101 @@ function Navbar() {
           <span>BizMart</span>
         </div>
 
-        <div className="d-flex align-items-center">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+          className="collapse navbar-collapse"
+          id="navbarNav"
+        >
+
+          <div className="navbar-nav me-auto">
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/dashboard')}
+            >
+              Dashboard
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/companies')}
+            >
+              Companies
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/financials')}
+            >
+              Financials
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/valuations')}
+            >
+              Valuations
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/listings')}
+            >
+              Listings
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/buyers')}
+            >
+              Buyer Profile
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/interests')}
+            >
+              Interests
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/matching')}
+            >
+              Matching
+            </button>
+
+            <button
+              className="nav-link btn btn-link text-white"
+              onClick={() => navigate('/contacts')}
+            >
+              Contacts
+            </button>
+
+          </div>
+
           <button
-            className="btn btn-link text-white text-decoration-none me-3"
-            onClick={() => navigate('/dashboard')}
+            className="btn btn-outline-light"
+            onClick={handleLogout}
           >
-            Dashboard
+            Logout
           </button>
-          <button
-            className="btn btn-link text-white text-decoration-none me-3"
-            onClick={() => navigate('/companies')}
-          >
-            Companies
-          </button>
+
         </div>
-        <button
-          className="btn btn-link text-white text-decoration-none me-3"
-          onClick={() => navigate('/financials')}
-        >
-          Financials
-        </button>
-        <button
-          className="btn btn-link text-white text-decoration-none me-3"
-          onClick={() =>
-            navigate('/valuations')
-          }
-        >
-          Valuations
-        </button>
-
-        <button
-          className="btn btn-link text-white text-decoration-none me-3"
-          onClick={() => navigate('/listings')}
-        >
-          Listings
-        </button>
-
-        <button
-          className="btn btn-link text-white text-decoration-none me-3"
-          onClick={() => navigate('/buyers')}
-        >
-          Buyer Profile
-        </button>
-
-        <button
-          className="btn btn-link text-white text-decoration-none me-3"
-          onClick={() =>
-            navigate('/interests')
-          }
-        >
-          Interests
-        </button>
-
-        <button
-          className="btn btn-link text-white text-decoration-none me-3"
-          onClick={() =>
-            navigate('/matching')
-          }
-        >
-          Matching
-        </button>
-
-        <button
-          className="btn btn-link text-white text-decoration-none me-3"
-          onClick={() =>
-            navigate('/contacts')
-          }
-        >
-          Contacts
-        </button>
-
-        <button
-          className="btn btn-outline-light"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
 
       </div>
+
     </nav>
   )
 }

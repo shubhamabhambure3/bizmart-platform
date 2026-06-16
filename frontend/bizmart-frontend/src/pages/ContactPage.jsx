@@ -8,6 +8,9 @@ import {
   deleteContact
 } from '../services/contactService'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
 function ContactPage() {
 
   const [contacts, setContacts] =
@@ -111,7 +114,7 @@ function ContactPage() {
 
       <Navbar />
     <div className="container mt-4">
-      <h2>
+      <h2 className="page-title">
         Contacts
       </h2>
 
@@ -197,11 +200,11 @@ function ContactPage() {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Interest</th>
+            <th>Related Interest</th>
             <th>Name</th>
             <th>Email</th>
             <th>Mobile</th>
-            <th>Status</th>
+            <th>Contact Status</th>
             <th>Actions</th>
           </tr>
         </thead>

@@ -14,6 +14,15 @@ import {
   getUserRole
 } from '../utils/jwtUtils'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
+import {
+  getAllCompanies
+} from '../services/companyService'
+
+
+
 function MatchingPage() {
 
   const role =
@@ -35,10 +44,27 @@ function MatchingPage() {
     setError] =
     useState('')
 
+  const [companies, setCompanies] =
+    useState([])
+
+  const getCompanyName =
+    (companyId) => {
+
+      const company =
+        companies.find(
+          c => c.id === companyId
+        )
+
+      return company
+        ? company.companyName
+        : `Company #${companyId}`
+    }
+
+
   useEffect(() => {
 
     loadBuyerProfiles()
-
+    getCompanyName()
   }, [])
 
   const loadBuyerProfiles =
@@ -86,7 +112,7 @@ function MatchingPage() {
 
       <div className="container mt-4">
 
-        <h1>
+        <h1 className="page-title">
           Matching Engine
         </h1>
 
@@ -182,9 +208,9 @@ function MatchingPage() {
 
                   <th>ID</th>
 
-                  <th>Company</th>
+                  <th>Company Name</th>
 
-                  <th>Valuation</th>
+                  <th>Business Valuation</th>
 
                   <th>Asking Price</th>
 
@@ -208,7 +234,7 @@ function MatchingPage() {
                       </td>
 
                       <td>
-                        {listing.companyId}
+                        {getCompanyName(listing.companyId)}
                       </td>
 
                       <td>
@@ -216,7 +242,7 @@ function MatchingPage() {
                       </td>
 
                       <td>
-                        {listing.askingPrice}
+                        {formatCurrency(listing.askingPrice)}
                       </td>
 
                       <td>

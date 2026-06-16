@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { register } from '../services/registerService'
+import logo from '../assets/bizmart-logo.png'
 
 function RegisterPage() {
   const [fullName, setFullName] = useState('')
@@ -46,9 +47,24 @@ function RegisterPage() {
 
             <div className="card-body">
 
-              <h2 className="fw-bold text-dark">
-                Register
-              </h2>
+              <div className="text-center mb-4">
+
+                <img
+                  src={logo}
+                  alt="BizMart"
+                  width="120"
+                  className="mb-3"
+                />
+
+                <h2>
+                  Register
+                </h2>
+
+                <p className="text-muted">
+                  Buy • Sell • Match Businesses
+                </p>
+
+              </div>
 
               {error && (
                 <div className="alert alert-danger">
@@ -152,6 +168,22 @@ function RegisterPage() {
                 >
                   Register
                 </button>
+
+                <div className="text-center mt-3">
+
+                  <span className="text-muted">
+                    Already have an account?
+                  </span>
+
+                  <button
+                    type="button"
+                    className="btn btn-link"
+                    onClick={() => navigate('/login')}
+                  >
+                    Login
+                  </button>
+
+                </div>
 
               </form>
 

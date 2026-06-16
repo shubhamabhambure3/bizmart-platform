@@ -12,6 +12,9 @@ import {
   getAllCompanies
 } from '../services/companyService'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
 function FinancialPage() {
 
   const [companies, setCompanies] = useState([])
@@ -52,6 +55,7 @@ function FinancialPage() {
   const [error, setError] =
     useState('')
 
+
   const loadData = async () => {
     try {
 
@@ -69,7 +73,22 @@ function FinancialPage() {
     }
   }
 
+  const getCompanyName =
+    (companyId) => {
+
+      const company =
+        companies.find(
+          c => c.id === companyId
+        )
+
+      return company
+        ? company.companyName
+        : `Company #${companyId}`
+    }
+
+
   useEffect(() => {
+    getCompanyName()
     loadData()
   }, [])
 
@@ -217,7 +236,9 @@ function FinancialPage() {
 
       <div className="container mt-4">
 
-        <h1>Financials</h1>
+        <h1 className="page-title">
+          💰 Financial Records
+        </h1>
 
         <div className="card shadow-sm">
 
@@ -401,89 +422,91 @@ function FinancialPage() {
 
           <div className="card-body">
 
-            <table className="table table-striped">
+            <div className="table-responsive">
 
-              <thead className="table-dark">
+              <table className="table table-bordered">
 
-                <tr>
-                  <th>ID</th>
-                  <th>Company</th>
-                  <th>Revenue Y1</th>
-                  <th>Revenue Y2</th>
-                  <th>Revenue Y3</th>
+                <thead className="table-dark">
 
-                  <th>EBITDA Y1</th>
-                  <th>EBITDA Y2</th>
-                  <th>EBITDA Y3</th>
+                  <tr>
+                    <th>ID</th>
+                    <th>Company</th>
+                    <th>Revenue Y1</th>
+                    <th>Revenue Y2</th>
+                    <th>Revenue Y3</th>
 
-                  <th>Assets</th>
-                  <th>Liabilities</th>
-                  <th>Actions</th>
-                </tr>
+                    <th>EBITDA Y1</th>
+                    <th>EBITDA Y2</th>
+                    <th>EBITDA Y3</th>
 
-              </thead>
-
-              <tbody>
-
-                {financials.map(financial => (
-
-                  <tr key={financial.id}>
-
-                    <td>
-                      {financial.id}
-                    </td>
-
-                    <td>
-                      {financial.companyId}
-                    </td>
-
-                    <td>{financial.revenueYear1}</td>
-                    <td>{financial.revenueYear2}</td>
-                    <td>{financial.revenueYear3}</td>
-
-                    <td>{financial.ebitdaYear1}</td>
-                    <td>{financial.ebitdaYear2}</td>
-                    <td>{financial.ebitdaYear3}</td>
-
-                    <td>{financial.assets}</td>
-                    <td>{financial.liabilities}</td>
-
-                    <td>
-
-                      <button
-                        className="btn btn-sm btn-warning me-2"
-                        onClick={() =>
-                          handleEdit(financial)
-                        }
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() =>
-                          handleDelete(
-                            financial.id
-                          )
-                        }
-                      >
-                        Delete
-                      </button>
-
-                    </td>
-
+                    <th>Assets</th>
+                    <th>Liabilities</th>
+                    <th>Actions</th>
                   </tr>
 
-                ))}
+                </thead>
 
-              </tbody>
+                <tbody>
 
-            </table>
+                  {financials.map(financial => (
+
+                    <tr key={financial.id}>
+
+                      <td>
+                        {financial.id}
+                      </td>
+
+                      <td>
+                        {getCompanyName(financial.companyId)}
+                      </td>
+
+                      <td>{formatCurrency(financial.revenueYear1)}</td>
+                      <td>{formatCurrency(financial.revenueYear2)}</td>
+                      <td>{formatCurrency(financial.revenueYear3)}</td>
+
+                      <td>{formatCurrency(financial.ebitdaYear1)}</td>
+                      <td>{formatCurrency(financial.ebitdaYear2)}</td>
+                      <td>{formatCurrency(financial.ebitdaYear3)}</td>
+
+                      <td>{formatCurrency(financial.assets)}</td>
+                      <td>{formatCurrency(financial.liabilities)}</td>
+
+                      <td>
+
+                        <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() =>
+                            handleEdit(financial)
+                          }
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() =>
+                            handleDelete(
+                              financial.id
+                            )
+                          }
+                        >
+                          Delete
+                        </button>
+
+                      </td>
+
+                    </tr>
+
+                  ))}
+
+                </tbody>
+
+              </table>
+
+            </div>
 
           </div>
-
         </div>
-
       </div>
     </>
   )

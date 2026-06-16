@@ -20,6 +20,9 @@ import {
   getUserRole
 } from '../utils/jwtUtils'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
 function InterestPage() {
 
   const role = getUserRole()
@@ -241,7 +244,7 @@ function InterestPage() {
 
       <div className="container mt-4">
 
-        <h1>Interests</h1>
+        <h1 className="page-title">Interests</h1>
 
         {success && (
           <div className="alert alert-success">
@@ -402,13 +405,13 @@ function InterestPage() {
 
                   <th>ID</th>
 
-                  <th>Buyer</th>
+                  <th>Buyer Profile</th>
 
-                  <th>Listing</th>
+                  <th>Business Listing</th>
 
                   <th>Message</th>
 
-                  <th>Status</th>
+                  <th>Interest Status</th>
 
                   <th>Created</th>
 

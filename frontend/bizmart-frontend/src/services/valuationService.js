@@ -24,3 +24,14 @@ export const getValuationByCompanyId =
 
     return response.data
   }
+
+  export const getAllValuations =
+  async () => {
+
+    const response =
+      await axiosClient.get(
+        '/api/valuations'
+      )
+
+    return response.data
+  }

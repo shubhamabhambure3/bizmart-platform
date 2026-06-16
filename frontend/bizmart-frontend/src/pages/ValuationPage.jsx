@@ -10,6 +10,9 @@ import {
   getAllCompanies
 } from '../services/companyService'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
 function ValuationPage() {
 
   const [companies, setCompanies] =
@@ -26,6 +29,20 @@ function ValuationPage() {
 
   const [error, setError] =
     useState('')
+
+  const getCompanyName =
+    (companyId) => {
+
+      const company =
+        companies.find(
+          c => c.id === companyId
+        )
+
+      return company
+        ? company.companyName
+        : `Company #${companyId}`
+    }
+
 
   useEffect(() => {
 
@@ -45,6 +62,7 @@ function ValuationPage() {
       }
 
     loadCompanies()
+    getCompanyName()
 
   }, [])
 
@@ -106,7 +124,9 @@ function ValuationPage() {
 
       <div className="container mt-4">
 
-        <h1>Valuations</h1>
+        <h1 className="page-title">
+          📈 Valuations
+        </h1>
 
         {success &&
           <div className="alert alert-success">
@@ -192,33 +212,33 @@ function ValuationPage() {
                 <tbody>
 
                   <tr>
-                    <th>ID</th>
+                    <th>Valuation ID</th>
                     <td>{valuation.id}</td>
                   </tr>
 
                   <tr>
-                    <th>Company ID</th>
-                    <td>{valuation.companyId}</td>
+                    <th>Company Name</th>
+                    <td>{getCompanyName(valuation.companyId)}</td>
                   </tr>
 
                   <tr>
                     <th>Asset Based Value</th>
                     <td>
-                      {valuation.assetBasedValue}
+                      {formatCurrency(valuation.assetBasedValue)}
                     </td>
                   </tr>
 
                   <tr>
                     <th>Revenue Based Value</th>
                     <td>
-                      {valuation.revenueBasedValue}
+                      {formatCurrency(valuation.revenueBasedValue)}
                     </td>
                   </tr>
 
                   <tr>
                     <th>EBITDA Based Value</th>
                     <td>
-                      {valuation.ebitdaBasedValue}
+                      {formatCurrency(valuation.ebitdaBasedValue)}
                     </td>
                   </tr>
 

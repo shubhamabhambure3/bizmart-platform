@@ -7,6 +7,9 @@ import {
   updateCompany
 } from '../services/companyService'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
 function CompaniesPage() {
 
   const [companyName, setCompanyName] = useState('')
@@ -114,7 +117,9 @@ function CompaniesPage() {
 
       <div className="container mt-4">
 
-        <h1>Companies</h1>
+        <h1 className="page-title">
+          🏢 Companies
+        </h1>
 
         <p className="text-muted">
           Manage company information and
@@ -251,7 +256,7 @@ function CompaniesPage() {
 
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-primary px-4"
               onClick={async () => {
 
                 try {

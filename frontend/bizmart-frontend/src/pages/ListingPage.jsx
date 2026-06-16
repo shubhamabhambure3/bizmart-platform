@@ -16,6 +16,11 @@ import {
   getUserRole
 } from '../utils/jwtUtils'
 
+import { formatCurrency }
+  from '../utils/currencyUtils'
+
+import { getAllValuations } from '../services/valuationService'
+
 function ListingPage() {
 
   const role = getUserRole()
@@ -47,6 +52,27 @@ function ListingPage() {
   const [error, setError] =
     useState('')
 
+  const [valuations, setValuations] =
+    useState([])
+
+  const loadValuations =
+    async () => {
+
+      const data =
+        await getAllValuations()
+
+      setValuations(data)
+    }
+
+  const loadCompanies =
+    async () => {
+
+      const data =
+        await getAllCompanies()
+
+      setCompanies(data)
+    }
+
   const loadData = async () => {
 
     try {
@@ -67,6 +93,7 @@ function ListingPage() {
 
   useEffect(() => {
     loadData()
+    loadValuations()
   }, [])
 
   const clearForm = () => {
@@ -193,13 +220,28 @@ function ListingPage() {
     })
   }
 
+  const getCompanyName =
+    (companyId) => {
+
+      const company =
+        companies.find(
+          c => c.id === companyId
+        )
+
+      return company
+        ? company.companyName
+        : `Company #${companyId}`
+    }
+
   return (
     <>
       <Navbar />
 
       <div className="container mt-4">
 
-        <h1>Listings</h1>
+        <h1 className="page-title">
+          📢 Listings
+        </h1>
 
         {success &&
           <div className="alert alert-success">
@@ -332,13 +374,13 @@ function ListingPage() {
 
                   <th>ID</th>
 
-                  <th>Company</th>
+                  <th>Company Name</th>
 
-                  <th>Valuation</th>
+                  <th>Business Valuation</th>
 
                   <th>Asking Price</th>
 
-                  <th>Status</th>
+                  <th>Listing Status</th>
 
                   {role === 'SELLER' &&
                     <th>Actions</th>}
@@ -356,15 +398,21 @@ function ListingPage() {
                     <td>{listing.id}</td>
 
                     <td>
-                      {listing.companyId}
+                      {
+                        getCompanyName(
+                          listing.companyId
+                        )
+                      }
                     </td>
 
                     <td>
-                      {listing.valuationId}
+                      Valuation Ref #{listing.valuationId}
                     </td>
 
                     <td>
-                      {listing.askingPrice}
+                      {formatCurrency(
+                        listing.askingPrice
+                      )}
                     </td>
 
                     <td>

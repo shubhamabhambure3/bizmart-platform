@@ -5,6 +5,7 @@ import logo from '../assets/bizmart-logo.png'
 import './LoginPage.css'
 import { Link } from 'react-router-dom'
 
+
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
