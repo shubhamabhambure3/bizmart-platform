@@ -15,6 +15,7 @@ import InterestPage
   from '../pages/InterestPage'
 import MatchingPage
   from '../pages/MatchingPage'
+import ContactPage from '../pages/ContactPage'
 
 function AppRoutes() {
   return (
@@ -80,6 +81,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <MatchingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/contacts"
+        element={
+          <ProtectedRoute>
+            <ContactPage />
           </ProtectedRoute>
         }
       />

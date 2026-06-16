@@ -11,8 +11,16 @@ function Navbar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
+    <nav
+      className="navbar navbar-expand-lg navbar-dark bg-dark"
+      style={{
+        overflowX: 'auto',
+        whiteSpace: 'nowrap'
+      }}
+    >
+      <div
+        className="container-fluid d-flex align-items-center"
+      >
 
         <div className="navbar-brand d-flex align-items-center">
           <img
@@ -85,6 +93,16 @@ function Navbar() {
         >
           Matching
         </button>
+
+        <button
+          className="btn btn-link text-white text-decoration-none me-3"
+          onClick={() =>
+            navigate('/contacts')
+          }
+        >
+          Contacts
+        </button>
+
         <button
           className="btn btn-outline-light"
           onClick={handleLogout}
